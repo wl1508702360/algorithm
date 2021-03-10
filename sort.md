@@ -226,5 +226,6 @@
         // 把pivot元素交换到mark指针所在的位置
         $arr[$startIndex] = $arr[$mark];
         $arr[$mark] = $pivot;
+        return $mark;
     }
 ```
