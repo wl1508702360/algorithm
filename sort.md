@@ -109,3 +109,122 @@
         return $arr;
     }
 ```
+
+# 快速排序
+
+什么是快速排序？  
+
+    也是一种`交换排序`，通过元素之间的比较和交换位置来达到排序的目的
+
+冒泡排序的思想？  
+
+    采用分治法的思想，在每一轮挑选一个基准元素，并让其他比它大的元素移动到数列的一边，比它小的元素移动到数列的另一边，从而把数列拆解成两部分。
+
+普通写法
+```php
+<?php
+    function quickSort($arr)
+    {
+        $count = count($arr);
+        if ($count <= 1) {
+            return $arr;
+        }
+        
+        $left = $right = [];
+        $basic = $arr[0];
+        for ($i = 1; $i < $count; $i++) {
+            if ($arr[$i] < $basic) {
+                $left[] = $arr[$i];
+            } else {
+                $right[] = $arr[$i];
+            }
+        }
+
+        $left = quickSort($left);
+        $right = quickSort($right);
+        return array_merge($left, [$basic], $right);
+    }
+```
+双边循环法
+
+从两边交替遍历元素
+```php
+<?php
+    function quickSort($arr, $startIndex, $endIndex)
+    {
+        if ($startIndex >= $endIndex) {
+            return;
+        }
+
+        // 得到基准元素的位置
+        $pivotIndex = partition($arr, $startIndex, $endIndex);
+        quickSort($arr, $startIndex, $pivotIndex - 1);
+        quickSort($arr, $pivotIndex + 1, $endIndex);
+    }
+
+    function partition($arr, $startIndex, $endIndex)
+    {
+        // 取第一个位置（也可以选择随机位置）的元素作为基准元素
+        $pivot = $arr[$startIndex];
+        $left = $startIndex;
+        $right = $endIndex;
+        while ($left != $right) {
+            // 控制right指针比较并向左移动
+            while ($left < $right && $arr[$right] > $pivot) {
+                $right++;
+            }
+
+            // 控制left指针比较并向右移动
+            while ($left < $right && $arr[$left] <= $pivot) {
+                $left++;
+            }
+
+            // 交换left和right指针所指向的元素
+            if ($left < $right) {
+                $temp = $arr[$left];
+                $arr[$left] = $arr[$right];
+                $arr[$right] = $temp;
+            }
+        }
+
+        // pivot和指针重合点交换
+        $arr[$startIndex] = $arr[$left];
+        $arr[$left] = $pivot;
+        return $left;
+    }
+```
+
+单边循环法
+
+从数组的一边对元素进行遍历和交换
+```php
+<?php
+    function quickSort($arr, $startIndex, $endIndex)
+    {
+        if ($startIndex >= $endIndex) {
+            return;
+        }
+        $pivotIndex = partition($arr, $sartIndex, $endIndex);
+        quickSort($arr, $startIndex, $pivotIndex - 1);
+        quickSort($arr, $pivotIndex + 1);
+    }
+
+    function partition($arr, $startIndex, $endIndex)
+    {
+        $pivot = $arr[$startIndex];
+        $mark = $startIndex;
+        for ($i = $startIndex + 1; $i < $endIndex; $i++) {
+            // 
+            if ($arr[$i] < $pivot) {
+                $mark++;
+                $temp = $arr[$mark];
+                $arr[$mark] = $arr[$i];
+                $arr[$i] = $temp;
+            }
+        }
+
+        // 把pivot元素交换到mark指针所在的位置
+        $arr[$startIndex] = $arr[$mark];
+        $arr[$mark] = $pivot;
+    }
+```
