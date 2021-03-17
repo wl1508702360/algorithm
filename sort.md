@@ -116,7 +116,7 @@
 
     也是一种`交换排序`，通过元素之间的比较和交换位置来达到排序的目的
 
-冒泡排序的思想？  
+快速排序的思想？  
 
     采用分治法的思想，在每一轮挑选一个基准元素，并让其他比它大的元素移动到数列的一边，比它小的元素移动到数列的另一边，从而把数列拆解成两部分。
 
@@ -227,5 +227,50 @@
         $arr[$startIndex] = $arr[$mark];
         $arr[$mark] = $pivot;
         return $mark;
+    }
+```
+
+# 插入排序
+思路：每步将一个待排序的值，按照其值大小插入到前面已经排好序的序列上，直到排成一个完整的有序序列
+```php
+<?php
+    function insertSort($arr)
+    {
+        $count = count($arr);
+        for ($i = 1; $i < $count; $i++) {
+            $temp = $arr[$i];
+            for ($j = $i - 1;$j >= 0; $j--) {
+                if ($arr[$j] > $temp) {
+                    $arr[$j+1] = $arr[$j];
+                    $arr[$j] = $temp;
+                }
+            }
+        }
+        return $arr;
+    }
+```
+
+# 选择排序
+思路：第一次从待排序的数据元素中选出最小（或最大）的一个元素，存放在序列的起始位置，然后再从剩余的未排序元素中寻找到最小（大）元素，然后放到已排序的序列的末尾。- 百度百科
+```php
+<?php
+    function selectSort($arr)
+    {
+        $count = count($arr);
+        for ($i = 0; $i < $count; $i++) {
+            $k = $i;
+            for ($j = $i+1; $j < $count; $j++) {
+                if ($arr[$j] < $arr[$k]) { # 每次都取最小的键值
+                    $k = $j;
+                }
+            }
+
+            if ($k != $i) {
+                $temp = $arr[$i];
+                $arr[$i] = $arr[$k];
+                $arr[$k] = $temp; 
+            }
+        }
+        return $arr;
     }
 ```
